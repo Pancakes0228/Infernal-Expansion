@@ -76,6 +76,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> CRIMSON_FUNGUS_CAP = BLOCKS.register("crimson_fungus_cap",  () -> new Block(AbstractBlock.Properties.from(Blocks.NETHER_WART_BLOCK)));
     public static final RegistryObject<Block> WARPED_FUNGUS_CAP = BLOCKS.register("warped_fungus_cap",    () -> new Block(AbstractBlock.Properties.from(Blocks.WARPED_WART_BLOCK)));
 
+    public static final RegistryObject<Block> LUMINOUS_EFFECT_BLOCK = BLOCKS.register("luminous_effect_block", () -> new LuminousEffectBlock(getProperties(Blocks.AIR).setLightLevel(value -> 15)));
 
     public static final RegistryObject<Block> GLOW_LANTERN = BLOCKS.register("lantern_glow",        () -> new LanternBlock(getProperties(Blocks.LANTERN)));
     public static final RegistryObject<Block> GLOW_TORCH = BLOCKS.register("torch_glow",            () -> new TorchBlock(getProperties(Blocks.TORCH), ParticleTypes.CRIT));

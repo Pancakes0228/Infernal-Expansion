@@ -6,13 +6,11 @@ import com.nekomaster1000.infernalexp.config.ConfigHolder;
 import com.nekomaster1000.infernalexp.config.InfernalExpansionConfig;
 import com.nekomaster1000.infernalexp.entities.*;
 import com.nekomaster1000.infernalexp.entities.ai.AvoidBlockGoal;
+import com.nekomaster1000.infernalexp.tileentities.LuminousTileEntity;
 import com.nekomaster1000.infernalexp.util.RegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.*;
@@ -28,6 +26,7 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.NoteBlockEvent;
@@ -49,6 +48,22 @@ public class ModEvents {
             ConfigHelper.bakeClient(config);
         } else if (config.getSpec() == ConfigHolder.SERVER_SPEC) {
             ConfigHelper.bakeServer(config);
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityTick(LivingEvent event){
+        LivingEntity entity = event.getEntityLiving();
+
+        if (entity.isPotionActive(ModEffects.LUMINOUS.get())) {
+            if (entity.getEntityWorld().getBlockState(entity.getPosition()) == ModBlocks.LUMINOUS_EFFECT_BLOCK.get().getDefaultState()) {
+                LuminousTileEntity luminousTileEntity = (LuminousTileEntity) entity.getEntityWorld().getTileEntity(entity.getPosition());
+                luminousTileEntity.ticks = 0;
+            } else {
+                if (entity.getEntityWorld().getBlockState(entity.getPosition()) == Blocks.AIR.getDefaultState()) {
+                    entity.getEntityWorld().setBlockState(entity.getPosition(), ModBlocks.LUMINOUS_EFFECT_BLOCK.get().getDefaultState());
+                }
+            }
         }
     }
 
